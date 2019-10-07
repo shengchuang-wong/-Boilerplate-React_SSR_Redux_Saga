@@ -1,0 +1,3 @@
+- Webpacker only supports css-loader versions greater than 2.1.1, and less than 3.0.0.
+- style-loader <= try update
+- The latest babel-loader (v8) is incompatible with babel-core, So get the babel-loader (v7.1.5)
