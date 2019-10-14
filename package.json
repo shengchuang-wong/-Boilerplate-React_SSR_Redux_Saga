@@ -4,10 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build:server": "webpack --config webpack.server.config.js --watch",
-    "start:server": "nodemon --watch bin bin/server.js",
-    "build:client": "webpack --config webpack.client.config.js --watch",
-    "start": "run-p build:client build:server start:server"
+    "build:dev": "webpack --config webpack.config.js --watch",
+    "start:dev": "nodemon --watch bin bin/server.js",
+    "start": "run-p build:dev start:dev"
   },
   "dependencies": {
     "axios": "^0.19.0",
