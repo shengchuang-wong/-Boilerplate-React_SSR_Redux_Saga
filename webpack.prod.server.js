@@ -1,7 +1,8 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const autoprefixer = require('autoprefixer');
 const merge = require('webpack-merge');
+const autoprefixer = require('autoprefixer');
 const baseConfig = require('./webpack.base.config');
 
 const CssModuleLoader = {
@@ -9,8 +10,17 @@ const CssModuleLoader = {
   options: {
     modules: true,
     localIdentName: '[local]__[hash:base64:5]',
+    exportOnlyLocals: false
   }
 };
+
+const CssLoader = {
+  loader: 'css-loader',
+  options: {
+    localIdentName: '[local]__[hash:base64:5]',
+    exportOnlyLocals: false
+  }
+}
 
 const postCssLoader = {
   loader: 'postcss-loader',
@@ -21,11 +31,13 @@ const postCssLoader = {
 };
 
 const config = {
-  mode: 'development',
-  entry: ['./src/client/index.js'],
+  mode: 'production',
+  target: 'node',
+  externals: [nodeExternals()],
+  entry: ['./src/server/index.js'],
   output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'bin'),
+    filename: 'server.js',
     publicPath: '/'
   },
   module: {
@@ -33,7 +45,6 @@ const config = {
       {
         test: /\.module\.s(a|c)ss$/,
         use: [
-          'style-loader',
           CssModuleLoader,
           postCssLoader,
           'sass-loader'
@@ -43,16 +54,11 @@ const config = {
         test: /\.s(a|c)ss$/,
         exclude: /\.module\.s(a|c)ss$/,
         use: [
-          'style-loader',
-          'css-loader',
+          CssLoader,
           postCssLoader,
           'sass-loader'
         ]
-      },
-      {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
-      },
+      }
     ]
   }
 };

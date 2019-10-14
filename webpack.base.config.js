@@ -23,12 +23,21 @@ module.exports = {
         options: {
           name: '[path][name].[ext]'
         }
+      },
+      {
+        test: /\.(html)$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            attrs: [':data-src']
+          }
+        }
       }
     ]
   },
-  resolve: { 
+  resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-    extensions: ['*', '.js', '.jsx'] ,
+    extensions: ['*', '.js', '.jsx'],
   },
   plugins: [
     new MiniCssExtractPlugin({

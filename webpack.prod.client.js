@@ -1,26 +1,17 @@
 const path = require('path');
-const nodeExternals = require('webpack-node-externals');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const merge = require('webpack-merge');
 const autoprefixer = require('autoprefixer');
+const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const CssModuleLoader = {
   loader: 'css-loader',
   options: {
     modules: true,
     localIdentName: '[local]__[hash:base64:5]',
-    exportOnlyLocals: true
   }
 };
-
-const CssLoader = {
-  loader: 'css-loader',
-  options: {
-    localIdentName: '[local]__[hash:base64:5]',
-    exportOnlyLocals: true
-  }
-}
 
 const postCssLoader = {
   loader: 'postcss-loader',
@@ -31,13 +22,11 @@ const postCssLoader = {
 };
 
 const config = {
-  mode: 'development',
-  target: 'node',
-  externals: [nodeExternals()],
-  entry: ['./src/server/index.js'],
+  mode: 'production',
+  entry: ['./src/client/index.js'],
   output: {
-    path: path.resolve(__dirname, 'bin'),
-    filename: 'server.js',
+    path: path.resolve(__dirname, 'public'),
+    filename: 'bundle-[contenthash].js',
     publicPath: '/'
   },
   module: {
@@ -45,6 +34,7 @@ const config = {
       {
         test: /\.module\.s(a|c)ss$/,
         use: [
+          MiniCssExtractPlugin.loader,
           CssModuleLoader,
           postCssLoader,
           'sass-loader'
@@ -54,17 +44,19 @@ const config = {
         test: /\.s(a|c)ss$/,
         exclude: /\.module\.s(a|c)ss$/,
         use: [
-          CssLoader,
+          MiniCssExtractPlugin.loader,
+          'css-loader',
           postCssLoader,
           'sass-loader'
         ]
       },
-      {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
-      }
     ]
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/template/index.html'
+    }),
+  ]
 };
 
 module.exports = merge.smartStrategy(
