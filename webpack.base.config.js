@@ -21,7 +21,7 @@ module.exports = {
         test: /\.(jpg|png|svg|gif|pdf)$/,
         loader: 'file-loader',
         options: {
-          name: '[path][name].[ext]'
+          name: '[path][name].[hash].[ext]'
         }
       },
       {
@@ -41,8 +41,8 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css',
+      filename: '[name].[contenthash].css',
+      chunkFilename: '[id][contenthash].css',
     }),
   ]
 }

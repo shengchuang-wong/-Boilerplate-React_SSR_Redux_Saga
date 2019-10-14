@@ -4,6 +4,7 @@ const autoprefixer = require('autoprefixer');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const CssModuleLoader = {
   loader: 'css-loader',
@@ -23,11 +24,6 @@ const postCssLoader = {
 
 const config = {
   mode: 'development',
-  devServer: {
-    contentBase: path.join(__dirname, 'public'),
-    compress: true,
-    port: 9000
-  },
   entry: ['./src/client/index.js'],
   output: {
     path: path.resolve(__dirname, 'public'),
@@ -39,14 +35,7 @@ const config = {
       {
         test: /\.module\.s(a|c)ss$/,
         use: [
-         {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              // you can specify a publicPath here
-              // by default it uses publicPath in webpackOptions.output
-              hmr: process.env.NODE_ENV === 'development',
-            },
-          },
+         'style-loader',
           CssModuleLoader,
           postCssLoader,
           'sass-loader'
@@ -56,14 +45,7 @@ const config = {
         test: /\.s(a|c)ss$/,
         exclude: /\.module\.s(a|c)ss$/,
         use: [
-         {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              // you can specify a publicPath here
-              // by default it uses publicPath in webpackOptions.output
-              hmr: process.env.NODE_ENV === 'development',
-            },
-          },
+         'style-loader',
           'css-loader',
           postCssLoader,
           'sass-loader'
@@ -75,6 +57,7 @@ const config = {
     new HtmlWebpackPlugin({
       template: './src/template/index.html'
     }),
+    new CleanWebpackPlugin()
   ]
 };
 

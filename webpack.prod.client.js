@@ -4,6 +4,9 @@ const autoprefixer = require('autoprefixer');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const CssModuleLoader = {
   loader: 'css-loader',
@@ -28,6 +31,9 @@ const config = {
     path: path.resolve(__dirname, 'public'),
     filename: 'bundle-[contenthash].js',
     publicPath: '/'
+  },
+  optimization: {
+    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
   },
   module: {
     rules: [
@@ -54,8 +60,14 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/template/index.html'
+      template: './src/template/index.html',
+      minify: {
+        removeAttributeQuotes: true,
+        removeComments: true,
+        collapseWhitespace: true
+      }
     }),
+    new CleanWebpackPlugin()
   ]
 };
 
