@@ -62,7 +62,6 @@ const config = {
     new HtmlWebpackPlugin({
       template: './src/template/index.html',
       minify: {
-        removeAttributeQuotes: true,
         removeComments: true,
         collapseWhitespace: true
       }

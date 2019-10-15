@@ -1,6 +1,7 @@
 import { put, takeLatest, all, call, fork } from 'redux-saga/effects'
 import axios from 'axios';
 import { fetchUsersSuccess } from '../actions'
+import { push } from 'connected-react-router'
 
 // export function* helloSaga() {
 //   console.log('Hello Sagas!')
@@ -19,8 +20,11 @@ function* fetchUsersSaga() {
           response.data
         )
       )
+      // if (typeof window !== undefined) {
+      //   yield put(push('/'))
+      // }
     }
-  } catch(err) {
+  } catch (err) {
     console.log('err', err)
   }
 }
