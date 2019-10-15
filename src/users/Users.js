@@ -15,7 +15,7 @@ const Users = ({ users, isFetchingUsers, fetchUsersRequest }) => {
         <title>Users page</title>
         <meta name="description" content="Users page description" />
       </Helmet>
-      <h1>Users component</h1>
+      <h1 style={{background: 'gold', color: '#222'}}>Users component</h1>
       <Link to="/">Back to home page</Link>
       <h2>List of users</h2>
       <ul>
