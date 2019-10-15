@@ -1,7 +1,8 @@
 import { put, takeLatest, all, call, fork } from 'redux-saga/effects'
 import axios from 'axios';
 import { fetchUsersSuccess } from '../actions'
-import { push } from 'connected-react-router'
+
+// import Cookies from 'universal-cookie';
 
 // export function* helloSaga() {
 //   console.log('Hello Sagas!')
@@ -20,8 +21,16 @@ function* fetchUsersSaga() {
           response.data
         )
       )
+
+      // const cookies = new Cookies();
+      // const setCookie = (name, value) => {
+      //   return cookies.set(name, value, {path: '/'})
+      // }
+      // yield call(setCookie, 'users', response.data)
+
+      // cookies.set, 'users', response.data, { path: '/' }
       // if (typeof window !== undefined) {
-      //   yield put(push('/'))
+      //   yield put(push('/'))`
       // }
     }
   } catch (err) {

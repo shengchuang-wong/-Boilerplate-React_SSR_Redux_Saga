@@ -6,6 +6,14 @@ import createStore from '../client/helpers/createStore';
 import indexHtml from '../../public/index.html';
 
 const app = express();
+import Cookies from 'universal-cookie';
+
+app.get("/cookies", (req, res) => {
+  const cookies = new Cookies(req.headers.cookie);
+  const allCookies = cookies.getAll()
+  console.log('all cookies', allCookies)
+  res.status(200).end(JSON.stringify(allCookies))
+})
 
 app.use(express.static("public"));
 app.get("*", function (req, res) {
