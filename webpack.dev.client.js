@@ -1,10 +1,10 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const WebpackBar = require('webpackbar');
 
 const CssModuleLoader = {
   loader: 'css-loader',
@@ -57,7 +57,11 @@ const config = {
     new HtmlWebpackPlugin({
       template: './src/template/index.html'
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new WebpackBar({
+      name: 'client',
+      color: '#136fd3'
+    })
   ]
 };
 

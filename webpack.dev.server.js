@@ -1,9 +1,9 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const merge = require('webpack-merge');
 const autoprefixer = require('autoprefixer');
 const baseConfig = require('./webpack.base.config');
+const WebpackBar = require('webpackbar');
 
 const CssModuleLoader = {
   loader: 'css-loader',
@@ -60,7 +60,13 @@ const config = {
         ]
       }
     ]
-  }
+  },
+  plugins: [
+    new WebpackBar({
+      name: 'server',
+      color: 'gold'
+    })
+  ]
 };
 
 module.exports = merge.smartStrategy(
