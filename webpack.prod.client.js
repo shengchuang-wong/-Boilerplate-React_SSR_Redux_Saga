@@ -1,20 +1,19 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const autoprefixer = require('autoprefixer');
-const merge = require('webpack-merge');
-const baseConfig = require('./webpack.base.config');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const TerserJSPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const path = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const autoprefixer = require('autoprefixer')
+const merge = require('webpack-merge')
+const baseConfig = require('./webpack.base.config')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const TerserJSPlugin = require('terser-webpack-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 const CssModuleLoader = {
   loader: 'css-loader',
   options: {
     modules: true,
-    localIdentName: '[local]__[hash:base64:5]',
+    localIdentName: '[local]__[hash:base64:5]'
   }
-};
+}
 
 const postCssLoader = {
   loader: 'postcss-loader',
@@ -22,7 +21,14 @@ const postCssLoader = {
     ident: 'postcss',
     plugins: () => [autoprefixer]
   }
-};
+}
+
+const sassOptions = {
+  loader: 'sass-resources-loader',
+  options: {
+    resources: './src/client/assets/scss/*.scss' // Import all scss
+  }
+}
 
 const config = {
   mode: 'production',
@@ -33,7 +39,7 @@ const config = {
     publicPath: '/'
   },
   optimization: {
-    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
   },
   module: {
     rules: [
@@ -43,7 +49,8 @@ const config = {
           MiniCssExtractPlugin.loader,
           CssModuleLoader,
           postCssLoader,
-          'sass-loader'
+          'sass-loader',
+          sassOptions
         ]
       },
       {
@@ -53,26 +60,22 @@ const config = {
           MiniCssExtractPlugin.loader,
           'css-loader',
           postCssLoader,
-          'sass-loader'
+          'sass-loader',
+          sassOptions
         ]
-      },
+      }
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/template/index.html',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true
-      }
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css',
+      chunkFilename: '[id][contenthash].css'
     }),
     new CleanWebpackPlugin()
   ]
-};
+}
 
-module.exports = merge.smartStrategy(
-  {
-    entry: 'prepend', // or 'replace'
-    'module.rules': 'prepend'
-  }
-)(baseConfig, config);
+module.exports = merge.smartStrategy({
+  entry: 'prepend', // or 'replace'
+  'module.rules': 'prepend'
+})(baseConfig, config)

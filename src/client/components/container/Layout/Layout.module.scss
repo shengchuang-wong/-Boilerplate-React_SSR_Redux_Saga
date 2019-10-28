@@ -1,0 +1,19 @@
+.container {
+  min-height: 100vh;
+  min-width: $minWidth;
+  display: flex;
+}
+
+.side {
+  height: 100vh;
+  background: $primaryBlue;
+  overflow: scroll;
+  width: $sideWidth;
+}
+
+.content {
+  background: white;
+  position: relative;
+  min-width: calc(#{$minWidth} - #{$sideWidth});
+  width: 100%;
+}

@@ -1,28 +1,17 @@
+import http from 'http'
+import app from './server'
 
-import 'babel-polyfill';
-import express from "express";
-import renderer from "./renderer";
-import createStore from '../client/helpers/createStore';
-import indexHtml from '../../public/index.html';
+let currentApp = app
+const server = http.createServer(app)
 
-const app = express();
-import Cookies from 'universal-cookie';
-
-app.get("/cookies", (req, res) => {
-  const cookies = new Cookies(req.headers.cookie);
-  const allCookies = cookies.getAll()
-  console.log('all cookies', allCookies)
-  res.status(200).end(JSON.stringify(allCookies))
+server.listen(3000, () => {
+  console.log('server started on port 3000')
 })
 
-app.use(express.static("public"));
-app.get("*", function (req, res) {
-  const store = createStore(req);
-  const context = {};
-  const data = indexHtml
-  renderer(data, req.path, context, store, res)
-});
-
-app.listen(3000, () => {
-  console.log('Listening on port 3000');
-});
+if (module.hot) {
+  module.hot.accept('./server', () => {
+    server.removeListener('request', currentApp)
+    server.on('request', app)
+    currentApp = app
+  })
+}

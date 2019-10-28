@@ -1,20 +1,23 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path')
+const LoadablePlugin = require('@loadable/webpack-plugin')
 
 module.exports = {
   // Tell webpack to run babel on every file it runs through
   module: {
     rules: [
       {
-        test: /.js$/,
+        test: /.(js|jsx)$/,
         loader: 'babel-loader',
-        include: path.resolve(__dirname, 'src'),
+        include: [path.resolve(__dirname, 'src')],
         exclude: /node_modules/,
         options: {
           presets: [
             '@babel/react',
-            ['@babel/env', { targets: { browsers: ['last 2 versions'] } }]
-          ],
+            [
+              '@babel/env',
+              { modules: false, targets: { browsers: ['last 2 versions'] } }
+            ]
+          ]
         }
       },
       {
@@ -23,26 +26,34 @@ module.exports = {
         options: {
           name: '[path][name].[hash].[ext]'
         }
-      },
-      {
-        test: /\.(html)$/,
-        use: {
-          loader: 'html-loader',
-          options: {
-            attrs: [':data-src']
-          }
-        }
       }
+      // {
+      //   test: /\.(html)$/,
+      //   use: {
+      //     loader: 'html-loader',
+      //     options: {
+      //       attrs: [':data-src']
+      //     }
+      //   }
+      // }
     ]
   },
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-    extensions: ['*', '.js', '.jsx'],
+    extensions: ['*', '.js', '.jsx']
   },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
-      chunkFilename: '[id][contenthash].css',
-    }),
-  ]
+  // optimization: {
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       // Merge all the CSS into one file
+  //       styles: {
+  //         name: 'styles',
+  //         test: /\.s?css$/,
+  //         chunks: 'all',
+  //         enforce: true,
+  //       },
+  //     },
+  //   },
+  // },
+  plugins: [new LoadablePlugin()]
 }

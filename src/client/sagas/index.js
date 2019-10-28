@@ -1,5 +1,5 @@
-import { put, takeLatest, all, call, fork } from 'redux-saga/effects'
-import axios from 'axios';
+import { put, takeLatest, all, call } from 'redux-saga/effects'
+import configuredAxios from 'client/helpers/configuredAxios'
 import { fetchUsersSuccess } from '../actions'
 
 // import Cookies from 'universal-cookie';
@@ -9,18 +9,15 @@ import { fetchUsersSuccess } from '../actions'
 // }
 
 const fetchUsersService = () => {
-  return axios.get('http://react-ssr-api.herokuapp.com/users');
+  const axios = configuredAxios('user', 'protected')
+  return axios.get('/users')
 }
 
 function* fetchUsersSaga() {
   try {
     const response = yield call(fetchUsersService)
     if (response.status >= 200 && response.status < 300) {
-      yield put(
-        fetchUsersSuccess(
-          response.data
-        )
-      )
+      yield put(fetchUsersSuccess(response.data))
 
       // const cookies = new Cookies();
       // const setCookie = (name, value) => {

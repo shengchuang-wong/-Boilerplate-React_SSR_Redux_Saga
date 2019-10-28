@@ -1,0 +1,9 @@
+.customDiv {
+  width: 90%;
+  min-width: getWidthRem(500px);
+  height: 50px;
+  background: $primaryBlue;
+  display: block;
+  position: absolute;
+  background-image: linear-gradient(to right, red ,blue);
+}

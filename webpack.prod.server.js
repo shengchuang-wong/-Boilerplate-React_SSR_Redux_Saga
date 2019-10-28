@@ -1,9 +1,9 @@
-const path = require('path');
-const nodeExternals = require('webpack-node-externals');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const merge = require('webpack-merge');
-const autoprefixer = require('autoprefixer');
-const baseConfig = require('./webpack.base.config');
+const path = require('path')
+const nodeExternals = require('webpack-node-externals')
+const merge = require('webpack-merge')
+const autoprefixer = require('autoprefixer')
+const baseConfig = require('./webpack.base.config')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const CssModuleLoader = {
   loader: 'css-loader',
@@ -12,7 +12,7 @@ const CssModuleLoader = {
     localIdentName: '[local]__[hash:base64:5]',
     exportOnlyLocals: false
   }
-};
+}
 
 const CssLoader = {
   loader: 'css-loader',
@@ -28,7 +28,14 @@ const postCssLoader = {
     ident: 'postcss',
     plugins: () => [autoprefixer]
   }
-};
+}
+
+const sassOptions = {
+  loader: 'sass-resources-loader',
+  options: {
+    resources: './src/client/assets/scss/*.scss' // Import all scss
+  }
+}
 
 const config = {
   mode: 'production',
@@ -45,27 +52,35 @@ const config = {
       {
         test: /\.module\.s(a|c)ss$/,
         use: [
+          MiniCssExtractPlugin.loader,
           CssModuleLoader,
           postCssLoader,
-          'sass-loader'
+          'sass-loader',
+          sassOptions
         ]
       },
       {
         test: /\.s(a|c)ss$/,
         exclude: /\.module\.s(a|c)ss$/,
         use: [
+          MiniCssExtractPlugin.loader,
           CssLoader,
           postCssLoader,
-          'sass-loader'
+          'sass-loader',
+          sassOptions
         ]
       }
     ]
-  }
-};
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css',
+      chunkFilename: '[id][contenthash].css'
+    })
+  ]
+}
 
-module.exports = merge.smartStrategy(
-  {
-    entry: 'prepend', // or 'replace'
-    'module.rules': 'prepend'
-  }
-)(baseConfig, config);
+module.exports = merge.smartStrategy({
+  entry: 'prepend', // or 'replace'
+  'module.rules': 'prepend'
+})(baseConfig, config)
