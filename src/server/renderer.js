@@ -37,36 +37,22 @@ export default async function renderer(path, context, store, req, res) {
           </ChunkExtractorManager>
         )
 
-        const regex = /(<div id="root">)(<\/div>)/
         let htmlTemplate = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
           <meta charset="UTF-8">
           <meta http-equiv="X-UA-Compatible" content="ie=edge">
+          <link href='https://fonts.googleapis.com/css?family=Product+Sans:300,400,500,700,300i,400i,500i,700i' rel='stylesheet' type='text/css' lazyload/>
           ${extractor.getStyleTags()}
         </head>
         <body>
-          <div id="root"></div>
+          <div id="root">${serverHtml}</div>
+          <script>window.INITIAL_STATE=${serialize(store.getState())}</script>
+          ${extractor.getScriptTags()}
         </body>
         </html>
         `
-
-        htmlTemplate = htmlTemplate.replace(regex, function(
-          original,
-          div1,
-          div2
-        ) {
-          return (
-            div1 +
-            serverHtml +
-            div2 +
-            `<script>window.INITIAL_STATE=${serialize(
-              store.getState()
-            )}</script>` +
-            `${extractor.getScriptTags()}`
-          )
-        })
         const helmet = Helmet.renderStatic()
         const head = helmet.title.toString() + helmet.meta.toString()
         const index = htmlTemplate.indexOf('</head>')
@@ -79,19 +65,6 @@ export default async function renderer(path, context, store, req, res) {
         res.send(html1 + head + html2)
       })
     getData(path, store)
-    // renderToString(
-    //   <ChunkExtractorManager extractor={extractor}>
-    //     <CookiesProvider cookies={req.universalCookies}>
-    //       <Provider store={store}>
-    //         <ErrorBoundary>
-    //           <StaticRouter location={path} context={context}>
-    //             <Layout />
-    //           </StaticRouter>
-    //         </ErrorBoundary>
-    //       </Provider>
-    //     </CookiesProvider>
-    //   </ChunkExtractorManager>
-    // )
     store.close()
   } catch (err) {
     console.log('error occured', err)
