@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build:dev:client": "webpack-dev-server --mode development --config webpack.dev.client.js",
-    "build:dev:server": "webpack --mode development --config webpack.dev.server.js --watch",
+    "build:dev:server": "webpack --mode development --config webpack.dev.server.js",
     "start:dev": "nodemon --watch bin bin/server.js",
     "start": "run-p build:dev:client build:dev:server",
     "build:prod:client": "webpack --mode production --config webpack.prod.client.js",

@@ -44,8 +44,13 @@ const sassOptions = {
 const config = {
   mode: 'development',
   target: 'node',
-  externals: [nodeExternals()],
-  entry: ['./src/server/index.js'],
+  entry: ['webpack/hot/poll?1000', './src/server/index'],
+  externals: [
+    nodeExternals({
+      whitelist: ['webpack/hot/poll?1000']
+    })
+  ],
+  watch: true,
   output: {
     path: path.resolve(__dirname, 'bin'),
     filename: 'server.js',
@@ -77,12 +82,10 @@ const config = {
     ]
   },
   plugins: [
-    new StartServerPlugin({
-      name: 'server.js',
-      signal: false,
-      nodeArgs: ['--inspect']
-    }),
+    new StartServerPlugin('server.js'),
+    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new WebpackBar({
       name: 'server',
       color: 'gold'
