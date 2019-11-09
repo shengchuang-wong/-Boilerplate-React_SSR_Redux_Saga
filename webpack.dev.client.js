@@ -90,11 +90,11 @@ const config = {
         default: false,
         // Merge all the CSS into one file
         styles: {
-          name: 'styles',
+          name: false,
           test: /\.s?css$/,
           chunks: 'all',
           minChunks: 1,
-          reuseExistingChunk: true,
+          // reuseExistingChunk: true,
           enforce: true
         }
       }
